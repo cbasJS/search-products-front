@@ -9,7 +9,7 @@ const Thumbnail = ({ productName, productPrice, productImage }) => {
       <div>
         <div className={style.imageContainer}>
           <img
-            src={require(`../../images/${productImage}`)}
+            src={productImage}
             alt="Thumbnail preview"
             style={{ maxHeight: "100%", maxWidth: "100%" }}
           />
@@ -29,11 +29,15 @@ const Thumbnail = ({ productName, productPrice, productImage }) => {
   )
 }
 
+Thumbnail.defaultProps = {
+  productName: "Lorem ipsum",
+  productPrice: "100",
+}
+
 Thumbnail.propTypes = {
   productName: PropTypes.string,
   productPrice: PropTypes.any,
   productImage: PropTypes.string,
-  _id: PropTypes.string,
 }
 
 export default Thumbnail

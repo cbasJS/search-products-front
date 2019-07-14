@@ -1,0 +1,15 @@
+@import "../../styles/variables.css";
+
+.section {
+  width: 100%;
+}
+
+.wrapper {
+  padding: var(--size-spacer-small) 0;
+}
+
+@media (min-width: 768px) {
+  .wrapper {
+    padding: var(--size-spacer-medium);
+  }
+}

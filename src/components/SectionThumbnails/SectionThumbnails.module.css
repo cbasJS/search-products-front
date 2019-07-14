@@ -1,3 +1,5 @@
+@import "../../styles/variables.css";
+
 .sectionThumbnails {
   width: 100%;
 }
@@ -5,15 +7,15 @@
 .wrapper {
   display: grid;
   grid-template-columns: auto;
-  row-gap: 1rem;
-  padding: 1rem 0;
+  row-gap: var(--size-spacer-small);
+  padding: var(--size-spacer-small) 0;
 }
 
 @media (min-width: 768px) {
   .wrapper {
     grid-template-columns: auto auto auto;
-    row-gap: 1.5rem;
-    column-gap: 1.5rem;
-    padding: 2rem;
+    row-gap: var(--size-spacer-medium);
+    column-gap: var(--size-spacer-medium);
+    padding: var(--size-spacer-medium);
   }
 }

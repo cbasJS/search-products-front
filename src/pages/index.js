@@ -2,13 +2,18 @@ import React, { useState, useEffect } from "react"
 import fetch from "cross-fetch"
 import MainLayout from "../layouts/MainLayout"
 import SEO from "../components/SEO"
-import Emoji from "../components/Emoji"
+import Section from "../components/Section"
+import SectionThumbnails from "../components/SectionThumbnails"
+import Thumbnail from "../components/Thumbnail"
+import Form from "../components/Form"
 global.Headers = fetch.Headers
 
 const IndexPage = () => {
-  const [param, setParam] = useState("")
-  const [searchesDonePrevious, setSearchesDonePrevious] = useState([])
-  const [data, setData] = useState(null)
+  let [param, setParam] = useState("")
+  let [searchesDonePrevious, setSearchesDonePrevious] = useState([])
+  let [msg, setMsg] = useState("")
+  let [data, setData] = useState(null)
+  let [visible, setVisible] = useState(false)
 
   useEffect(() => {
     setSearchesDonePrevious(
@@ -17,6 +22,10 @@ const IndexPage = () => {
         : []
     )
   }, [])
+
+  useEffect(() => {
+    visible && setTimeout(() => setVisible(!visible), 3000)
+  }, [visible])
 
   const handleChange = event => {
     setParam(event.target.value)
@@ -28,6 +37,7 @@ const IndexPage = () => {
     )
       .then(res => {
         if (res.status >= 400) {
+          console.log(res.json())
           throw new Error("Bad response from server")
         }
         return res.json()
@@ -36,7 +46,9 @@ const IndexPage = () => {
         setData(result.contents[0].mainContent[3].contents)
       })
       .catch(err => {
-        console.error(err)
+        setMsg(err.message)
+        setVisible(!visible)
+        console.log("error", err.message)
       })
     if (searchesDonePrevious.length >= 5) {
       searchesDonePrevious.shift()
@@ -48,39 +60,56 @@ const IndexPage = () => {
     )
     event.preventDefault()
   }
-  console.log(data)
 
   return (
     <MainLayout>
       <SEO title="Home" />
       <h1>Hi there!</h1>
       <p>Welcome to the search product project.</p>
-      <p>
-        Now type something <Emoji label="sheep" symbol="🤭" />{" "}
-        <Emoji label="sheep" symbol="⤵" />:
-      </p>
-      <form>
-        <div>
-          <label>
-            <input
-              type="text"
-              name="param"
-              value={param}
-              onChange={handleChange}
-            ></input>
-          </label>
-        </div>
-        <div>
-          <input type="submit" value="Search" onClick={handleSubmit}></input>
-        </div>
-      </form>
-      {searchesDonePrevious.length > 0 && (
-        <div>
-          <p>Tus ultimas 5 busquedas</p>
-          {searchesDonePrevious.map((value, index) => (
-            <p key={index}>{value}</p>
-          ))}
-        </div>
+      <Section>
+        <Form
+          handleChange={handleChange}
+          handleSubmit={handleSubmit}
+          currentValue={param}
+          msg={msg}
+          visible={visible}
+        />
+      </Section>
+      <Section>
+        {searchesDonePrevious.length > 0 && (
+          <div>
+            <div>
+              <p>Your last 5 searches</p>
+            </div>
+            <ul>
+              {searchesDonePrevious.map((value, index) => (
+                <li key={index}>
+                  <span>{value}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+      </Section>
+
+      {data !== null && (
+        <React.Fragment>
+          <Section>
+            <h3>We found {data[0].totalNumRecs} products</h3>
+          </Section>
+          <SectionThumbnails>
+            {data[0].records.map((record, index) => {
+              return (
+                <Thumbnail
+                  key={index}
+                  productName={record.productDisplayName[0]}
+                  productPrice={record.productPrice[0]}
+                  productImage={record.thumbnailImage[0]}
+                />
+              )
+            })}
+          </SectionThumbnails>
+        </React.Fragment>
       )}
     </MainLayout>
   )
