@@ -1,0 +1,21 @@
+.thumbnail {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  transition: 0.3s;
+  width: 100%;
+}
+
+.thumbnail:hover {
+  box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+}
+
+.imageContainer {
+  display: flex;
+  height: 17rem;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.container {
+  padding: 1rem;
+}
